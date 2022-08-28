@@ -108,11 +108,13 @@
     </div>
     <div class="col-3 right"></div>
     <CreateTweetModal />
+    <MobileNavbar class="mobile-navbar" />
   </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
+import MobileNavbar from "../components/MobileNavbar.vue";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
@@ -123,6 +125,7 @@ export default {
   components: {
     Navbar,
     CreateTweetModal,
+    MobileNavbar,
   },
   data() {
     return {
@@ -402,6 +405,14 @@ export default {
           background-color: $gray3;
         }
       }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .setting-wrapper {
+    .mobile-navbar {
+      display: none;
     }
   }
 }

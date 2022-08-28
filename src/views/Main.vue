@@ -1,7 +1,10 @@
 <template>
   <div class="row outer-main-wrapper">
     <!--component Navbar -->
-    <Navbar class="col-2 main-nav" />
+    <Navbar
+      class="main-nav"
+      :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    />
     <Spinner v-if="isLoading" class="col-7" />
     <!-- MainPage.vue & ReplyList -->
     <router-view
@@ -11,21 +14,27 @@
       :newReply="newReply"
       :popular="topPopular"
       @after-click-reply="afterClickReply"
-      class="col-7 main-page scrollbar"
+      class="main-page scrollbar"
+      :class="{ 'col-7': fullWidth > 574 }"
     />
     <!--component Populars -->
-    <Populars class="col-3 popular" />
+    <Populars
+      class="popular"
+      :class="{ 'col-3': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    />
     <!-- Modal -->
     <CreateTweetModal @after-submit-tweet="afterSubmitTweet" />
     <ReplyModal
       :replyModalData="replyModalData"
       @main-after-submit-reply="mainAfterSubmitReply"
     />
+    <MobileNavbar class="mobile-navbar" />
   </div>
 </template>
 
 <script>
 import Populars from "../components/Populars.vue";
+import MobileNavbar from "../components/MobileNavbar.vue";
 import Navbar from "../components/Navbar.vue";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
 import ReplyModal from "../components/ReplyModal.vue";
@@ -45,6 +54,7 @@ export default {
     ReplyModal,
     CreateTweetModal,
     Spinner,
+    MobileNavbar,
   },
   data() {
     return {
@@ -53,10 +63,22 @@ export default {
       newReply: {},
       theTweetId: -1, //及時增加留言數使用
       isLoading: true,
+      fullWidth: 0,
     };
   },
   created() {
     this.fetchTweets();
+  },
+  mounted() {
+    this.fullWidth = window.innerWidth;
+    // window.onresize 及時監聽視窗大小
+    window.onresize = () => {
+      this.fullWidth = window.innerWidth;
+    };
+  },
+  destroyed() {
+    // 元件銷毀要 解綁事件
+    window.onresize = null;
   },
   methods: {
     async fetchTweets() {
@@ -126,6 +148,14 @@ export default {
   .scrollbar {
     &::-webkit-scrollbar {
       width: 1px;
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .outer-main-wrapper {
+    .mobile-navbar {
+      display: none;
     }
   }
 }

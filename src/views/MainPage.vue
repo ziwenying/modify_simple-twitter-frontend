@@ -1,6 +1,7 @@
 <template>
   <div class="main-outer">
     <div class="main-page-title">
+      <img class="user-avatar" :src="currentUser.avatar" alt="user-avatar" />
       <h4 class="pb-4">首頁</h4>
     </div>
     <form @submit.stop.prevent="handleSubmit">
@@ -160,79 +161,94 @@ export default {
 <style scoped lang="scss">
 @import "./../assets/application.scss";
 
-%btn-style {
-  height: 40px;
-  background: $brand-color;
-  color: $white;
-  border-radius: 50px;
-}
 .main-outer {
   position: relative;
   .main-page-title {
+    display: flex;
     position: sticky;
     top: 0;
+    width: 100%;
     background: $white;
     height: 74px;
     border-bottom: $light-blue2 1px solid;
     z-index: 1;
+    .user-avatar {
+      @extend %user-avatar;
+      margin: 12px 0 0 36px;
+    }
     h4 {
       height: 74px;
       padding: 24px 0 0 23px;
       font-size: 24px;
       font-weight: 700;
-      border-left: $light-blue2 1px solid;
-      border-right: $light-blue2 1px solid;
       z-index: 1;
     }
   }
-  .main-wrapper {
-    position: relative;
-    border-top: $light-blue2 1px solid;
-    border-left: $light-blue2 1px solid;
-    border-right: $light-blue2 1px solid;
-    .main-tweet-wrapper {
-      position: relative;
-      .avatar-input {
-        display: flex;
-        position: relative;
-        padding: 16px 0 0 23px;
+  form {
+    .main-wrapper {
+      display: none;
+    }
+  }
+}
 
-        .user-avatar {
-          width: 50px;
-          height: 50px;
-          margin: 0 8px 0 0;
-          border-radius: 50%;
+@media screen and (min-width: 575px) {
+  .main-outer {
+    .user-avatar {
+      display: none;
+    }
+    h4 {
+      width: 100%;
+      border-left: $light-blue2 1px solid;
+      border-right: $light-blue2 1px solid;
+    }
+    .main-wrapper {
+      display: block;
+      position: relative;
+      border-top: $light-blue2 1px solid;
+      border-left: $light-blue2 1px solid;
+      border-right: $light-blue2 1px solid;
+      .main-tweet-wrapper {
+        position: relative;
+        .avatar-input {
+          display: flex;
+          position: relative;
+          padding: 16px 0 0 23px;
+
+          .user-avatar {
+            @include user-avatar-mixin();
+            margin: 0 8px 0 0;
+          }
+          .textarea-tweet {
+            padding: 12px;
+            width: 100%;
+            height: 150px;
+            border: none;
+            resize: none;
+          }
+          textarea::-webkit-input-placeholder {
+            color: $Secondary;
+            font-size: 16px;
+            font-weight: 700;
+          }
         }
-        .textarea-tweet {
-          padding: 12px;
-          width: 100%;
-          height: 150px;
-          border: none;
-          resize: none;
-        }
-        textarea::-webkit-input-placeholder {
-          color: $Secondary;
-          font-size: 16px;
-          font-weight: 700;
-        }
-      }
-      .input-footer {
-        display: flex;
-        justify-content: flex-end;
-        padding: 0 15px 15px 20px;
-        border-bottom: $light-blue2 10px solid;
-        .waring-msg {
-          padding: 10px;
-          color: $brand-color;
-          font-size: 15px;
-        }
-        .btn-setting {
-          width: 64px;
-          font-size: 18px;
-          @extend %btn-style;
-          &:disabled {
-            background-color: $gray3;
-            color: $near-white;
+        .input-footer {
+          display: flex;
+          justify-content: flex-end;
+          padding: 0 15px 15px 20px;
+          border-bottom: $light-blue2 10px solid;
+          .waring-msg {
+            padding: 10px;
+            color: $brand-color;
+            font-size: 15px;
+          }
+          .btn-setting {
+            width: 64px;
+            font-size: 18px;
+            @include btn-style-mixin();
+            &:disabled {
+              background-color: $gray3;
+              color: $near-white;
+            }
           }
         }
       }

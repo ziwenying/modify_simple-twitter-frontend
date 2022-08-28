@@ -18,10 +18,24 @@
               aria-label="Close"
             >
               <img
+                class="close-orange"
                 aria-hidden="true"
                 src="~@/assets/image/modal-close-icon.png"
                 alt="close-icon"
               />
+              <img
+                class="arrow"
+                aria-hidden="true"
+                src="~@/assets/image/arrow.png"
+                alt="close-icon"
+              />
+            </button>
+            <button
+              class="modal-tweet-btn top-btn"
+              type="submit"
+              :disabled="description.length > 140"
+            >
+              推文
             </button>
           </div>
           <div class="modal-body">
@@ -31,7 +45,7 @@
             <div class="modal-tweet-text">
               <textarea
                 v-model="description"
-                class="form-control"
+                class="form-text"
                 id="tweet-text"
                 name="tweet-text"
                 type="text"
@@ -42,7 +56,7 @@
               >字數不可超過 140 字</span
             >
             <button
-              class="modal-tweet-btn"
+              class="modal-tweet-btn bottom-btn"
               type="submit"
               :disabled="description.length > 140"
             >
@@ -58,7 +72,7 @@
 <script>
 import { Toast } from "./../utils/helpers";
 import tweetsAPI from "./../apis/tweets";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 import $ from "jquery";
 
 export default {
@@ -69,7 +83,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   methods: {
     async handleSubmit() {
@@ -93,13 +107,15 @@ export default {
             title: "推文發送成功",
           });
         }
-        const { data } = await tweetsAPI.tweets.create({ description: this.description })
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        const { data } = await tweetsAPI.tweets.create({
+          description: this.description,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
         }
         // 伺服器新增 Comment 成功後...
         this.$emit("after-submit-tweet", {
-          tweetId: data.tweetId, 
+          tweetId: data.tweetId,
           description: this.description,
         });
         // 送出後清空新增推文區塊的文字
@@ -121,79 +137,134 @@ export default {
 <style lang="scss" scoped>
 @import "./../assets/application.scss";
 
-.modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 634px;
-  height: 300px;
-  background-color: $white;
-  background-clip: padding-box;
-  border-radius: 14px;
-  z-index: 10;
-  .modal-header {
-    width: 100%;
-    height: 17%;
-    border-bottom: 1px solid $light-blue2;
-    display: flex;
-    .close-btn {
+.modal-dialog {
+  all: unset;
+  .modal-content {
+    border-radius: 0;
+    height: 100%;
+    .modal-header {
+      display: flex;
       align-items: center;
-      img {
-        width: 24px;
-        height: 24px;
+      .close-btn {
+        .close-orange {
+          display: none;
+          width: 24px;
+          height: 24px;
+        }
+        .arrow {
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .modal-tweet-btn {
+        @extend %btn-style;
+        width: 64px;
+      }
+    }
+    .modal-body {
+      display: flex;
+      .modal-user-avatar {
+        img {
+          @extend %user-avatar;
+        }
+      }
+      .modal-tweet-text {
+        textarea {
+          margin: 8px;
+          border: none;
+          resize: none;
+        }
+      }
+      .bottom-btn {
+        display: none;
       }
     }
   }
-  .modal-body {
-    display: flex;
-    width: 100%;
-    height: 83%;
-    padding: 16px 24px;
-    .modal-user-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      img {
-        border-radius: 50%;
-      }
-    }
-    .modal-tweet-text {
-      flex: 1;
-      margin-left: 8px;
-      margin-top: 8px;
-      textarea {
-        width: 90%;
-        height: 75%;
-        border-color: transparent;
-        border-radius: 5px;
-        resize: none;
-        &::-webkit-scrollbar {
-          width: 6px;
+}
+
+@media screen and (min-width: 575px) {
+  .modal-dialog {
+    position: fixed;
+    top: 56px;
+    left: 25%;
+    .modal-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 634px;
+      height: 300px;
+      background-color: $white;
+      border-radius: 14px;
+      z-index: 10;
+      .modal-header {
+        width: 100%;
+        height: 17%;
+        border-bottom: 1px solid $light-blue2;
+        display: flex;
+        .close-btn {
+          align-items: center;
+          width: 24px;
+          height: 24px;
+          .close-orange {
+            display: block;
+          }
+          .arrow {
+            display: none;
+          }
         }
-        &::-webkit-scrollbar-thumb {
-          background-color: $light-blue2;
-          border-radius: 3px;
-        }
       }
-    }
-    .alert-msg {
-      position: absolute;
-      right: 100px;
-      bottom: 28px;
-      font-size: 15px;
-      font-weight: 500;
-      color: $Error;
-    }
-    .modal-tweet-btn {
-      @extend %btn-style;
-      width: 64px;
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      font-size: 16px;
-      font-weight: 400;
-      &:disabled {
-        background-color: $gray3;
+      .modal-body {
+        display: flex;
+        width: 100%;
+        height: 83%;
+        padding: 16px 24px;
+        .modal-user-avatar {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          img {
+            border-radius: 50%;
+          }
+        }
+        .modal-tweet-text {
+          flex: 1;
+          margin-left: 8px;
+          margin-top: 8px;
+          textarea {
+            width: 90%;
+            height: 75%;
+            border-color: transparent;
+            border-radius: 5px;
+            resize: none;
+            &::-webkit-scrollbar {
+              width: 6px;
+            }
+            &::-webkit-scrollbar-thumb {
+              background-color: $light-blue2;
+              border-radius: 3px;
+            }
+          }
+        }
+        .alert-msg {
+          position: absolute;
+          right: 100px;
+          bottom: 28px;
+          font-size: 15px;
+          font-weight: 500;
+          color: $Error;
+        }
+        .modal-tweet-btn {
+          @include btn-style-mixin();
+          width: 64px;
+          position: absolute;
+          bottom: 16px;
+          right: 16px;
+          font-size: 16px;
+          font-weight: 400;
+          &:disabled {
+            background-color: $gray3;
+          }
+        }
       }
     }
   }

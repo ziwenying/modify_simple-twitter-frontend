@@ -45,11 +45,13 @@
       @user-after-submit-reply="userAfterSubmitReply"
       :replyModalData="replyModalData"
     />
+    <MobileNavbar class="mobile-navbar" />
   </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
+import MobileNavbar from "../components/MobileNavbar.vue";
 import UserProfileCard from "../components/UserProfileCard.vue";
 import UserNavPills from "../components/UserNavPills.vue";
 import Populars from "../components/Populars.vue";
@@ -72,6 +74,7 @@ export default {
     ReplyModal,
     CreateTweetModal,
     Spinner,
+    MobileNavbar,
   },
   computed: {
     ...mapState(["currentUser", "topPopular"]),
@@ -324,6 +327,14 @@ export default {
   .scrollbar {
     &::-webkit-scrollbar {
       width: 1px;
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .outer-user-wrapper {
+    .mobile-navbar {
+      display: none;
     }
   }
 }

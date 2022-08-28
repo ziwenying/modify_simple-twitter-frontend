@@ -165,12 +165,12 @@ export default {
     width: 100%;
     .tweet-link {
       display: flex;
-      padding: 0 0 0 23px;
+      padding: 0 0 0 12px;
       border: $light-blue2 1px solid;
       color: $black;
     }
     .user-avatar img {
-      margin: 16px 8px 0 0;
+      margin: 16px 8px 0 12px;
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -189,6 +189,9 @@ export default {
           color: $black;
           font-size: 16px;
           font-weight: 700;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           &:hover {
             text-decoration: underline;
           }
