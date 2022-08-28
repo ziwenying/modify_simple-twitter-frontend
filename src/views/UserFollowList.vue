@@ -2,7 +2,7 @@
   <div class="row outer-follow-wrapper">
     <!--component Navbar -->
     <Navbar class="col-2 main-nav" />
-    <Spinner v-if="isLoading" class="col-7"/>
+    <Spinner v-if="isLoading" class="col-7" />
     <div v-else class="col-7 follow-page scrollbar">
       <div class="follow-outer">
         <div class="follow-lists-title">
@@ -19,12 +19,18 @@
         <!-- component FollowerNavPills.vue -->
         <FollowerNavPills />
         <!-- UserFollowers.vue, UserFollowings.vue -->
-        <router-view class="bottom-lists scrollbar" :change-follow="changeFollow"/>
+        <router-view
+          class="bottom-lists scrollbar"
+          :change-follow="changeFollow"
+        />
       </div>
     </div>
 
     <!--component Populars -->
-    <Populars class="col-3 popular" @after-follow-change-in-popular="afterFollowChange"/>
+    <Populars
+      class="col-3 popular"
+      @after-follow-change-in-popular="afterFollowChange"
+    />
     <CreateTweetModal />
   </div>
 </template>
@@ -33,7 +39,7 @@
 import Navbar from "../components/Navbar.vue";
 import FollowerNavPills from "../components/FollowerNavPills.vue";
 import Populars from "../components/Populars.vue";
-import Spinner from "./../components/Spinner.vue"
+import Spinner from "./../components/Spinner.vue";
 import { Toast } from "./../utils/helpers";
 import tweetsAPI from "./../apis/tweets";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
@@ -45,14 +51,14 @@ export default {
     Populars,
     FollowerNavPills,
     CreateTweetModal,
-    Spinner
+    Spinner,
   },
   data() {
     return {
       tweets: [],
       userName: "", // 渲染頁面上方標題
       changeFollow: false,
-      isLoading: true
+      isLoading: true,
     };
   },
   created() {
@@ -62,12 +68,12 @@ export default {
   },
   methods: {
     afterFollowChange() {
-      this.changeFollow = !this.changeFollow
+      this.changeFollow = !this.changeFollow;
     },
     // 利用使用者 id 取得所有推文，計算推文數量使用
     async fetchTweets(userId) {
       try {
-        this.isLoading = true
+        this.isLoading = true;
         const response = await tweetsAPI.tweets.getUsersTweets({ userId });
         const { data } = response;
 
@@ -76,9 +82,9 @@ export default {
         }
         this.tweets = data;
         this.userName = data[0].User.name;
-        this.isLoading = false
+        this.isLoading = false;
       } catch (error) {
-        this.isLoading = false
+        this.isLoading = false;
         console.error(error.message);
         Toast.fire({
           icon: "error",

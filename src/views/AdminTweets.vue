@@ -2,7 +2,7 @@
   <div class="admin-tweets-wrapper row">
     <Navbar class="col-2 pl-0" />
     <!-- <div>後台推文清單</div> -->
-    <Spinner  class="col-10" v-if="isLoading"/>
+    <Spinner class="col-10" v-if="isLoading" />
     <AdminTweetsList
       v-else
       class="col-10"
@@ -12,23 +12,23 @@
   </div>
 </template>
 <script>
-import Navbar from "./../components/Navbar.vue";
+import Navbar from "../components/Navbar.vue";
 import AdminTweetsList from "./../components/AdminTweetsList.vue";
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
-import Spinner from "./../components/Spinner.vue"
+import Spinner from "./../components/Spinner.vue";
 
 export default {
   name: "AdminTweets",
   components: {
     Navbar,
     AdminTweetsList,
-    Spinner
+    Spinner,
   },
   data() {
     return {
       tweets: [],
-      isLoading: true
+      isLoading: true,
     };
   },
   created() {
@@ -37,15 +37,15 @@ export default {
   methods: {
     async fetchTweets() {
       try {
-        this.isLoading = true
+        this.isLoading = true;
         const { data } = await adminAPI.tweets.get();
         if (data.status === "error") {
           throw new Error(data.message);
         }
         this.tweets = data;
-        this.isLoading = false
+        this.isLoading = false;
       } catch (error) {
-        this.isLoading = false
+        this.isLoading = false;
         console.error(error.message);
         Toast.fire({
           icon: "error",

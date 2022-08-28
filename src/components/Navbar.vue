@@ -11,21 +11,23 @@
               alt="logo-img"
             />
           </router-link>
-          <!-- 在該頁面時, icon和選項文字變成橘色 -->
+          <!-- 在該頁面時, 選項文字變成橘色 -->
           <div
-            class="home-btn nav-item btn-clicked"
-            v-if="$route.name === 'main-page' || $route.name === 'reply-list'"
+            class="home-btn nav-item"
+            :class="{
+              'btn-clicked':
+                $route.name === 'main-page' || $route.name === 'reply-list',
+            }"
           >
+            <!-- 在該頁面時, icon變成橘色 -->
             <img
+              v-if="$route.name === 'main-page' || $route.name === 'reply-list'"
               class="home-icon"
               src="~@/assets/image/home-orange.png"
               alt="home-icon"
             />
-            <router-link to="/main" class="nav-text">首頁</router-link>
-          </div>
-          <!-- 黑色 -->
-          <div class="home-btn nav-item" v-else>
             <img
+              v-else
               class="home-icon"
               src="~@/assets/image/home.png"
               alt="home-icon"
@@ -33,26 +35,26 @@
             <router-link to="/main" class="nav-text">首頁</router-link>
           </div>
           <div
-            class="user-profile-btn nav-item btn-clicked"
-            v-if="
-              $route.name === 'main-tweets' ||
-              $route.name === 'replies' ||
-              $route.name === 'liked-tweets'
-            "
+            class="user-profile-btn nav-item"
+            :class="{
+              'btn-clicked':
+                $route.name === 'main-tweets' ||
+                $route.name === 'replies' ||
+                $route.name === 'liked-tweets',
+            }"
           >
             <img
+              v-if="
+                $route.name === 'main-tweets' ||
+                $route.name === 'replies' ||
+                $route.name === 'liked-tweets'
+              "
               class="user-icon"
               src="~@/assets/image/user-orange.png"
               alt="user-icon"
             />
-            <router-link
-              :to="{ name: 'user', params: { id: currentUser.id } }"
-              class="nav-text"
-              >個人資料</router-link
-            >
-          </div>
-          <div class="user-profile-btn nav-item" v-else>
             <img
+              v-else
               class="user-icon"
               src="~@/assets/image/user.png"
               alt="user-icon"
@@ -64,18 +66,17 @@
             >
           </div>
           <div
-            class="setting-btn nav-item btn-clicked"
-            v-if="$route.name === 'setting'"
+            class="setting-btn nav-item"
+            :class="{ 'btn-clicked': $route.name === 'setting' }"
           >
             <img
+              v-if="$route.name === 'setting'"
               class="setting-icon"
               src="~@/assets/image/setting-orange.png"
               alt="setting-icon"
             />
-            <p class="nav-text">設定</p>
-          </div>
-          <div class="setting-btn nav-item" v-else>
             <img
+              v-else
               class="setting-icon"
               src="~@/assets/image/setting.png"
               alt="setting-icon"
@@ -100,18 +101,17 @@
         <div class="nav-top">
           <img class="logo-img" src="~@/assets/image/logo.png" alt="logo-img" />
           <div
-            class="home-btn nav-item btn-clicked"
-            v-if="$route.name === 'admin-tweets'"
+            class="home-btn nav-item"
+            :class="{ 'btn-clicked': $route.name === 'admin-tweets' }"
           >
             <img
+              v-if="$route.name === 'admin-tweets'"
               class="home-icon"
               src="~@/assets/image/home-orange.png"
               alt="home-icon"
             />
-            <p class="nav-text">推文清單</p>
-          </div>
-          <div class="home-btn nav-item" v-else>
             <img
+              v-else
               class="home-icon"
               src="~@/assets/image/home.png"
               alt="home-icon"
@@ -121,18 +121,17 @@
             >
           </div>
           <div
-            class="user-profile-btn nav-item btn-clicked"
-            v-if="$route.name === 'admin-users'"
+            class="user-profile-btn nav-item"
+            :class="{ 'btn-clicked': $route.name === 'admin-users' }"
           >
             <img
+              v-if="$route.name === 'admin-users'"
               class="user-icon"
               src="~@/assets/image/user-orange.png"
               alt="user-icon"
             />
-            <p class="nav-text">使用者列表</p>
-          </div>
-          <div class="user-profile-btn nav-item" v-else>
             <img
+              v-else
               class="user-icon"
               src="~@/assets/image/user.png"
               alt="user-icon"

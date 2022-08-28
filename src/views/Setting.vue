@@ -6,8 +6,7 @@
       <hr />
       <form action="submit" @submit.prevent.stop="handleSubmit">
         <div class="setting-form-container">
-          
-            <div class="form-container">
+          <div class="form-container">
             <div class="form-field account-field">
               <label for="account">帳號</label>
               <input
@@ -18,7 +17,10 @@
                 placeholder="請輸入帳號"
                 required
               />
-              <div class="alert-msg" v-if="errorMsg === 'The account is registered.'">
+              <div
+                class="alert-msg"
+                v-if="errorMsg === 'The account is registered.'"
+              >
                 <span class="msg">account已重複註冊！</span>
               </div>
             </div>
@@ -36,7 +38,7 @@
               />
               <div class="alert-msg">
                 <span class="msg" v-if="name.length > 50">字數超過上限！</span>
-                <span class="letter-count" >{{name.length}}/50</span>
+                <span class="letter-count">{{ name.length }}/50</span>
               </div>
             </div>
 
@@ -50,10 +52,16 @@
                 placeholder="請輸入Email"
                 required
               />
-              <div class="alert-msg" v-if="errorMsg === 'The email is registered.'">
+              <div
+                class="alert-msg"
+                v-if="errorMsg === 'The email is registered.'"
+              >
                 <span class="msg">Email已重複註冊！</span>
               </div>
-              <div class="alert-msg" v-if="errorMsg === 'Invalid email address.'">
+              <div
+                class="alert-msg"
+                v-if="errorMsg === 'Invalid email address.'"
+              >
                 <span class="msg">Email格式錯誤</span>
               </div>
             </div>
@@ -82,12 +90,19 @@
               />
             </div>
           </div>
-
-          
         </div>
         <div class="btn-container">
-          <button class="processing-btn" disabled v-if="isProcessing">處理中</button>
-          <button class="save-btn" type="submit" v-else :disabled="name.length > 50 ">儲存</button>
+          <button class="processing-btn" disabled v-if="isProcessing">
+            處理中
+          </button>
+          <button
+            class="save-btn"
+            type="submit"
+            v-else
+            :disabled="name.length > 50"
+          >
+            儲存
+          </button>
         </div>
       </form>
     </div>
@@ -97,11 +112,11 @@
 </template>
 
 <script>
-import Navbar from "./../components/Navbar.vue";
+import Navbar from "../components/Navbar.vue";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
-import { Toast } from './../utils/helpers'
-import { mapState } from 'vuex'
-import usersAPI from './../apis/users'
+import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
+import usersAPI from "./../apis/users";
 
 export default {
   name: "Setting",
@@ -110,7 +125,7 @@ export default {
     CreateTweetModal,
   },
   data() {
-    return {     
+    return {
       id: -1,
       account: "",
       name: "",
@@ -118,138 +133,147 @@ export default {
       password: "",
       checkPassword: "",
       isProcessing: false,
-      errorMsg : ""
-    }
+      errorMsg: "",
+    };
   },
   created() {
     // 避免currentUser資料還沒傳進來, 就已經渲染元件
-    if (this.currentUser.id === -1 ) {
-      return
+    if (this.currentUser.id === -1) {
+      return;
     }
-    const { id } = this.$route.params 
-    this.fetchUserProfile(id)
+    const { id } = this.$route.params;
+    this.fetchUserProfile(id);
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   // 避免currentUser資料還沒傳進來, 就已經渲染元件
   watch: {
     currentUser(newVal) {
       this.currentUser = {
         ...this.currentUser,
-        ...newVal
-      }
-      this.id = this.currentUser.id,
-      this.account = this.currentUser.account,
-      this.name = this.currentUser.name,
-      this.email = this.currentUser.email
-    }
+        ...newVal,
+      };
+      (this.id = this.currentUser.id),
+        (this.account = this.currentUser.account),
+        (this.name = this.currentUser.name),
+        (this.email = this.currentUser.email);
+    },
   },
   beforeRouteUpdate(to, from, next) {
     // 避免currentUser資料還沒傳進來, 就已經渲染元件
-    if (this.currentUser.id === -1 ) {
-      return
+    if (this.currentUser.id === -1) {
+      return;
     }
-    const {id} = to.params
-    this.fetchUserProfile( id )
-    next()
-  }, 
+    const { id } = to.params;
+    this.fetchUserProfile(id);
+    next();
+  },
   methods: {
     fetchUserProfile(userId) {
-      this.id = this.currentUser.id,
-      this.account = this.currentUser.account,
-      this.name = this.currentUser.name,
-      this.email = this.currentUser.email
+      (this.id = this.currentUser.id),
+        (this.account = this.currentUser.account),
+        (this.name = this.currentUser.name),
+        (this.email = this.currentUser.email);
       // 如果當前登入的使用者id和路由id不符合, 轉址
       if (this.id !== Number(userId)) {
-        this.$router.push('not-found')
+        this.$router.push("not-found");
       }
-    }, 
-      async handleSubmit(e) {
+    },
+    async handleSubmit(e) {
       try {
-        this.errorMsg = ''
-        if (!this.account.trim() || !this.email.trim() || !this.name.trim() || !this.password.trim() || !this.checkPassword.trim()) {
-        Toast.fire({
-          icon: 'warning',
-          title: '請輸入所有欄位，如不更新密碼，請輸入舊密碼'
-        })
-        return
-      } else if ( this.password !== this.checkPassword) {
-        this.password = ''
-        this.checkPassword = ''
-        Toast.fire({
-          icon: 'warning',
-          title: '兩次密碼輸入不同'
-        })
-        return 
-      } else if (this.name.length > 50) {
-        Toast.fire({
-          icon: 'warning',
-          title: '暱稱不可超過50字'
-        })
-        return
-      }
-        this.isProcessing = true
-        const form = e.target
-        const formData = new FormData(form)
+        this.errorMsg = "";
+        if (
+          !this.account.trim() ||
+          !this.email.trim() ||
+          !this.name.trim() ||
+          !this.password.trim() ||
+          !this.checkPassword.trim()
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入所有欄位，如不更新密碼，請輸入舊密碼",
+          });
+          return;
+        } else if (this.password !== this.checkPassword) {
+          this.password = "";
+          this.checkPassword = "";
+          Toast.fire({
+            icon: "warning",
+            title: "兩次密碼輸入不同",
+          });
+          return;
+        } else if (this.name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "暱稱不可超過50字",
+          });
+          return;
+        }
+        this.isProcessing = true;
+        const form = e.target;
+        const formData = new FormData(form);
         const response = await usersAPI.update({
-          userId: this.id, formData
-        })
-        const { data } = response
-        if (response.statusText !== 'OK') {
-          throw new Error (data.message)
+          userId: this.id,
+          formData,
+        });
+        const { data } = response;
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
         }
         Toast.fire({
-          icon: 'success',
-          title: '更新帳戶資料成功'
-        })
+          icon: "success",
+          title: "更新帳戶資料成功",
+        });
         // 更新成功, 清空密碼
-        this.password = ''
-        this.checkPassword = ''
-        this.isProcessing = false
+        this.password = "";
+        this.checkPassword = "";
+        this.isProcessing = false;
       } catch (error) {
-        this.isProcessing = false
-        console.error(error.message)
-        if (error.message === 'The email is registered.') {
-          this.errorMsg = error.message
-            Toast.fire({
-            icon: 'error',
-            title: 'Email已重複註冊！'
-          })
-        } else if (error.message === 'The account is registered.') {
-          this.errorMsg = error.message
-            Toast.fire({
-            icon: 'error',
-            title: 'account已重複註冊！'
-          })
-        } else if (error.message === 'Name is too long.') {
-          this.errorMsg = error.message
-            Toast.fire({
-            icon: 'error',
-            title: '暱稱不可超過50字'
-          })
-        } else if (error.message === 'Password and checkPassword are not same.') {
-          this.errorMsg = error.message
+        this.isProcessing = false;
+        console.error(error.message);
+        if (error.message === "The email is registered.") {
+          this.errorMsg = error.message;
           Toast.fire({
-            icon: 'error',
-            title: '兩次密碼輸入不相符'
-          })
-        } else if (error.message === 'Invalid email address.') {
-          this.errorMsg = error.message
+            icon: "error",
+            title: "Email已重複註冊！",
+          });
+        } else if (error.message === "The account is registered.") {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "account已重複註冊！",
+          });
+        } else if (error.message === "Name is too long.") {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "暱稱不可超過50字",
+          });
+        } else if (
+          error.message === "Password and checkPassword are not same."
+        ) {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "兩次密碼輸入不相符",
+          });
+        } else if (error.message === "Invalid email address.") {
+          this.errorMsg = error.message;
           Toast.fire({
             icon: "error",
             title: "Email格式錯誤，請填入有效的Email地址",
           });
         } else {
-          this.errorMsg = error.message
-            Toast.fire({
-            icon: 'error',
-            title: '資料更新失敗'
-          })
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "資料更新失敗",
+          });
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
