@@ -27,7 +27,7 @@
                 class="arrow"
                 aria-hidden="true"
                 src="~@/assets/image/arrow.png"
-                alt="close-icon"
+                alt="arrow-icon"
               />
             </button>
             <button
@@ -57,6 +57,7 @@
             >
             <button
               class="modal-tweet-btn bottom-btn"
+              @click.prevent="isClickedTweet(oneTweet.id)"
               type="submit"
               :disabled="description.length > 140"
             >
@@ -139,11 +140,13 @@ export default {
 
 .modal-dialog {
   all: unset;
+  height: 100vh;
   .modal-content {
     border-radius: 0;
     height: 100%;
     .modal-header {
       display: flex;
+      width: 100%;
       align-items: center;
       .close-btn {
         .close-orange {
@@ -163,17 +166,31 @@ export default {
     }
     .modal-body {
       display: flex;
+      position: relative;
+      width: 100%;
       .modal-user-avatar {
         img {
           @extend %user-avatar;
         }
       }
       .modal-tweet-text {
+        flex-grow: 1;
+        height: 100%;
         textarea {
+          width: 100%;
+          height: 100%;
           margin: 8px;
           border: none;
           resize: none;
         }
+      }
+      .alert-msg {
+        position: absolute;
+        right: 100px;
+        bottom: 28px;
+        font-size: 15px;
+        font-weight: 500;
+        color: $Error;
       }
       .bottom-btn {
         display: none;
@@ -244,14 +261,6 @@ export default {
               border-radius: 3px;
             }
           }
-        }
-        .alert-msg {
-          position: absolute;
-          right: 100px;
-          bottom: 28px;
-          font-size: 15px;
-          font-weight: 500;
-          color: $Error;
         }
         .modal-tweet-btn {
           @include btn-style-mixin();

@@ -1,9 +1,12 @@
 <template>
   <div class="row outer-user-wrapper">
     <!--component Navbar -->
-    <Navbar class="col-2 user-nav" />
+    <Navbar
+      class="main-nav"
+      :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    />
     <Spinner v-if="isLoading" class="col-7" />
-    <div class="col-7 user-page" v-else>
+    <div class="user-page" :class="{ 'col-7': fullWidth > 574 }" v-else>
       <div class="user-outer">
         <div class="reply-lists-title">
           <router-link :to="{ name: 'main-page' }">
@@ -34,6 +37,7 @@
     <Populars
       class="col-3 popular"
       @change-profile-follow="changeProfilePopular"
+      :class="{ 'col-3': fullWidth > 574, 'd-none': fullWidth <= 574 }"
     />
     <!-- component UserEditModal -->
     <UserEditModal
@@ -96,6 +100,7 @@ export default {
       followShip: false,
       isLoading: true,
       theTweetId: -1, //及時增加留言數使用
+      fullWidth: 0,
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -111,6 +116,17 @@ export default {
     this.fetchProfile(id);
     this.$store.dispatch("fetchPopular");
     this.fetchFollowings(this.currentUser.id);
+  },
+  mounted() {
+    this.fullWidth = window.innerWidth;
+    // window.onresize 及時監聽視窗大小
+    window.onresize = () => {
+      this.fullWidth = window.innerWidth;
+    };
+  },
+  destroyed() {
+    // 元件銷毀要 解綁事件
+    window.onresize = null;
   },
   methods: {
     async fetchProfile(userId) {
@@ -302,7 +318,7 @@ export default {
       .reply-lists-title {
         display: flex;
         align-items: center;
-        margin: 16px 0 17px 0;
+        height: 75px;
         background: $white;
         .arrow {
           margin: 0 0 0 28px;
@@ -333,6 +349,13 @@ export default {
 
 @media screen and (min-width: 575px) {
   .outer-user-wrapper {
+    .user-page {
+      .user-outer {
+        .reply-lists-title {
+          margin: 16px 0 17px 0;
+        }
+      }
+    }
     .mobile-navbar {
       display: none;
     }

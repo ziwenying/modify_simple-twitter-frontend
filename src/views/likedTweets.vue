@@ -227,7 +227,7 @@ export default {
       border-left: $light-blue2 1px solid;
     }
     .user-avatar {
-      margin: 16px 8px 0 0;
+      margin: 16px 8px 0 24px;
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -288,6 +288,16 @@ export default {
             margin: 0 8px 0 0;
           }
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .tweet-lists {
+    .tweet-list {
+      .user-avatar {
+        margin: 16px 8px 0 0;
       }
     }
   }

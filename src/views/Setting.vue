@@ -1,7 +1,10 @@
 <template>
   <div class="row setting-wrapper">
-    <Navbar class="col-2 pl-0" />
-    <div class="col-7 setting-form-area">
+    <Navbar
+      class="pl-0"
+      :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    />
+    <div class="setting-form-area" :class="{ 'col-7': fullWidth > 574 }">
       <h4>帳戶設定</h4>
       <hr />
       <form action="submit" @submit.prevent.stop="handleSubmit">
@@ -103,10 +106,14 @@
           >
             儲存
           </button>
+          <button class="logout-btn" @click="logout">登出</button>
         </div>
       </form>
     </div>
-    <div class="col-3 right"></div>
+    <div
+      class="right"
+      :class="{ 'col-3': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    ></div>
     <CreateTweetModal />
     <MobileNavbar class="mobile-navbar" />
   </div>
@@ -127,8 +134,13 @@ export default {
     CreateTweetModal,
     MobileNavbar,
   },
+  // 取得Vuex中的currentUser資料
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
+      role: "",
       id: -1,
       account: "",
       name: "",
@@ -137,6 +149,7 @@ export default {
       checkPassword: "",
       isProcessing: false,
       errorMsg: "",
+      fullWidth: 0,
     };
   },
   created() {
@@ -147,8 +160,16 @@ export default {
     const { id } = this.$route.params;
     this.fetchUserProfile(id);
   },
-  computed: {
-    ...mapState(["currentUser"]),
+  mounted() {
+    this.fullWidth = window.innerWidth;
+    // window.onresize 及時監聽視窗大小
+    window.onresize = () => {
+      this.fullWidth = window.innerWidth;
+    };
+  },
+  destroyed() {
+    // 元件銷毀要 解綁事件
+    window.onresize = null;
   },
   // 避免currentUser資料還沒傳進來, 就已經渲染元件
   watch: {
@@ -276,6 +297,18 @@ export default {
         }
       }
     },
+    logout() {
+      // 因為呼叫revokeAuthentication幫忙改state資料時, currentUser就會被清空, 先把role存起來, 以便等一下判別轉址到哪裡
+      this.role = this.currentUser.role;
+      this.$store.commit("revokeAuthentication");
+      if (this.role === "user") {
+        // 使用者登出-> 前台登入頁
+        this.$router.push("/login");
+      } else {
+        // 管理員登出-> 前台登入頁
+        this.$router.push("/admin/login");
+      }
+    },
   },
 };
 </script>
@@ -286,12 +319,12 @@ export default {
 .setting-wrapper {
   width: 100%;
   margin: 0 auto;
-  height: 914px;
   .setting-form-area {
     position: relative;
     padding-right: 24px;
     padding-left: 24px;
     padding-top: 24px;
+    width: 100%;
     border-right: 1px solid $light-blue2;
     border-left: 1px solid $light-blue2;
     h4 {
@@ -310,6 +343,7 @@ export default {
       // 表格置中
       display: flex;
       justify-content: center;
+      height: 754px;
       .form-container {
         padding-top: 24px;
         width: 593px;
@@ -394,6 +428,8 @@ export default {
         color: $white;
       }
       .save-btn {
+        position: absolute;
+        top: 529px;
         width: 88px;
         height: 46px;
         border-radius: 50px;
@@ -405,12 +441,29 @@ export default {
           background-color: $gray3;
         }
       }
+      .logout-btn {
+        position: absolute;
+        top: 585px;
+        width: 88px;
+        &:hover {
+          color: #0062ff;
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
 
 @media screen and (min-width: 575px) {
   .setting-wrapper {
+    height: 914px;
+    .setting-form-area {
+      .btn-container {
+        .logout-btn {
+          display: none;
+        }
+      }
+    }
     .mobile-navbar {
       display: none;
     }

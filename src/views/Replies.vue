@@ -107,12 +107,13 @@ export default {
     border-bottom: $light-blue2 1px solid;
 
     .user-avatar {
+      margin: 0 0 0 24px;
       width: 50px;
       height: 50px;
       border-radius: 50%;
     }
     .reply-content {
-      width: 90%;
+      width: 80%;
       overflow-wrap: anywhere;
       margin: 0 0 0 8px;
       .reply-title {
@@ -162,6 +163,18 @@ export default {
       .reply-who,
       .text {
         margin: 8px 0 0 0;
+      }
+    }
+  }
+}
+@media screen and (min-width: 575px) {
+  .reply-lists {
+    .reply-list {
+      .user-avatar {
+        margin: 0;
+      }
+      .reply-content {
+        width: 90%;
       }
     }
   }

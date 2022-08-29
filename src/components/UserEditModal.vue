@@ -21,7 +21,18 @@
             data-dismiss="modal"
             aria-label="Close"
           >
-            <span aria-hidden="true">&times;</span>
+            <img
+              class="close-orange"
+              aria-hidden="true"
+              src="~@/assets/image/modal-close-icon.png"
+              alt="close-icon"
+            />
+            <img
+              class="arrow"
+              aria-hidden="true"
+              src="~@/assets/image/arrow.png"
+              alt="close-icon"
+            />
           </button>
           <button
             type="submit"
@@ -271,28 +282,32 @@ export default {
 
 .modal {
   .modal-dialog {
+    all: unset;
+    height: 100vh;
     .modal-content {
-      width: 641px;
-      border-radius: 14px;
+      border-radius: 0px;
       .modal-header {
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         position: relative;
         height: 57px;
         padding: 0;
         .modal-title {
           position: absolute;
           left: 56px;
-          padding: 15px 0 0 0;
           font-size: 18px;
         }
         .close-btn {
           position: absolute;
           left: 19.5px;
-          width: 15px;
-          height: 15px;
-          padding: 15px 0 0 0;
-          color: $brand-color;
+          .close-orange {
+            display: none;
+          }
+          .arrow {
+            width: 24px;
+            height: 24px;
+          }
           z-index: 2;
         }
         .modal-save {
@@ -312,11 +327,11 @@ export default {
         padding: 0;
         .modal-img {
           position: relative;
-          width: 639px;
+          width: 100%;
           .black {
             .background-img {
               height: 200px;
-              width: 639px;
+              width: 100%;
             }
           }
           .black::before {
@@ -331,11 +346,12 @@ export default {
             opacity: 0.25;
           }
           .icon-add-delete {
-            position: absolute;
             display: flex;
             align-items: center;
-            top: 90px;
-            left: 297px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             height: 15px;
             .add-avatar {
               cursor: pointer;
@@ -345,25 +361,22 @@ export default {
             .delete-img {
               width: 15px;
               height: 15px;
-            }
-            .delete-img {
               cursor: pointer;
               margin: 0 0 0 38.5px;
             }
           }
           .avatar-wrapper {
             position: absolute;
-            top: 124px;
+            top: 159px;
             left: 16px;
-            width: 140px;
-            height: 140px;
-            border: 4px white solid;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             .black::before {
               display: block;
               content: "";
-              width: 132px;
-              height: 132px;
+              width: 80px;
+              height: 80px;
               background: $black;
               border-radius: 50%;
               opacity: 0.5;
@@ -372,8 +385,8 @@ export default {
             .black {
               .user-avatar {
                 border-radius: 50%;
-                width: 132px;
-                height: 132px;
+                width: 80px;
+                height: 80px;
                 cursor: pointer;
                 object-fit: cover;
               }
@@ -391,7 +404,7 @@ export default {
           }
         }
         .name-introduction {
-          margin: 80px 16px 40px 16px;
+          margin: 56px 16px 40px 16px;
           .form-field.name-field {
             margin-bottom: 32px;
           }
@@ -462,7 +475,6 @@ export default {
               height: 26px;
             }
           }
-
           .introduction-field {
             position: relative;
             background-color: #f5f8fa;
@@ -490,6 +502,72 @@ export default {
                 font-size: 12px;
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .modal {
+    .modal-dialog {
+      position: absolute;
+      top: 20px;
+      left: 25%;
+      .modal-content {
+        width: 641px;
+        border-radius: 14px;
+        .modal-header {
+          .close-btn {
+            .close-orange {
+              display: block;
+              width: 15px;
+              height: 15px;
+            }
+            .arrow {
+              display: none;
+            }
+          }
+          .modal-save {
+            @extend %btn-style;
+          }
+        }
+        .modal-body {
+          .modal-img {
+            width: 639px;
+            .black {
+              .background-img {
+                width: 639px;
+              }
+            }
+            .icon-add-delete {
+              display: flex;
+              align-items: center;
+              top: 90px;
+              left: 297px;
+              height: 15px;
+            }
+            .avatar-wrapper {
+              top: 124px;
+              left: 16px;
+              width: 140px;
+              height: 140px;
+              border: 4px white solid;
+              .black::before {
+                width: 132px;
+                height: 132px;
+              }
+              .black {
+                .user-avatar {
+                  width: 132px;
+                  height: 132px;
+                }
+              }
+            }
+          }
+          .name-introduction {
+            margin: 80px 16px 40px 16px;
           }
         }
       }

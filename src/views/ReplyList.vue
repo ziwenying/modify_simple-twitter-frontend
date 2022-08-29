@@ -116,6 +116,7 @@ export default {
 
 .reply-outer {
   position: relative;
+  width: 100%;
   .reply-lists-title {
     display: flex;
     align-items: center;
@@ -127,9 +128,9 @@ export default {
     border-left: $light-blue2 1px solid;
     z-index: 1;
     .arrow {
-      margin: 0 0 0 28px;
-      width: 17px;
-      height: 14px;
+      margin: 0 0 0 32px;
+      width: 24px;
+      height: 24px;
       z-index: 1;
     }
     h4:nth-child(1) {
@@ -148,5 +149,43 @@ export default {
     border-left: $light-blue2 1px solid;
     border-bottom: $light-blue2 1px solid;
   }
+}
+
+@media screen and (min-width: 575px) {
+  // .reply-outer {
+  //   position: relative;
+  //   .reply-lists-title {
+  //     display: flex;
+  //     align-items: center;
+  //     position: sticky;
+  //     top: 0;
+  //     background: $white;
+  //     border-right: $light-blue2 1px solid;
+  //     border-bottom: $light-blue2 1px solid;
+  //     border-left: $light-blue2 1px solid;
+  //     z-index: 1;
+  //     .arrow {
+  //       margin: 0 0 0 28px;
+  //       width: 17px;
+  //       height: 14px;
+  //       z-index: 1;
+  //     }
+  //     h4:nth-child(1) {
+  //       cursor: pointer;
+  //     }
+  //     h4 {
+  //       padding: 24px 0 0 19px;
+  //       font-size: 24px;
+  //       font-weight: 700;
+  //       z-index: 1;
+  //     }
+  //   }
+  //   .main-wrapper {
+  //     position: relative;
+  //     border-right: $light-blue2 1px solid;
+  //     border-left: $light-blue2 1px solid;
+  //     border-bottom: $light-blue2 1px solid;
+  //   }
+  // }
 }
 </style>

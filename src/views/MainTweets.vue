@@ -187,7 +187,8 @@ export default {
 .tweet-lists {
   overflow-y: scroll;
   height: 400px;
-  border-right: $light-blue2 1px solid;
+  border-top: $light-blue2 1px solid;
+  border-bottom: $light-blue2 1px solid;
   .tweet-list {
     width: 100%;
     .tweet-link {
@@ -199,13 +200,13 @@ export default {
       border-left: $light-blue2 1px solid;
     }
     .user-avatar {
-      margin: 16px 8px 0 0;
+      margin: 16px 8px 0 24px;
       width: 50px;
       height: 50px;
       border-radius: 50%;
     }
     .tweet-content {
-      width: 90%;
+      width: 80vw;
       display: flex;
       flex-direction: column;
       padding: 0 29px 0 0;
@@ -263,6 +264,19 @@ export default {
             margin: 0 8px 0 1px;
           }
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .tweet-lists {
+    width: 100%;
+    border-right: $light-blue2 1px solid;
+    .tweet-list {
+      width: 100%;
+      .user-avatar {
+        margin: 16px 8px 0 0;
       }
     }
   }

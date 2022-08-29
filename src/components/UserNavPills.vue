@@ -48,6 +48,7 @@ export default {
 
 .nav-pills {
   display: flex;
+  padding: 30px 0 0 0;
   border-right: $light-blue2 1px solid;
   border-bottom: $light-blue2 1px solid;
   border-left: $light-blue2 1px solid;

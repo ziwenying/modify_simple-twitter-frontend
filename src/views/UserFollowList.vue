@@ -1,9 +1,16 @@
 <template>
   <div class="row outer-follow-wrapper">
     <!--component Navbar -->
-    <Navbar class="col-2 main-nav" />
+    <Navbar
+      class="main-nav"
+      :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
+    />
     <Spinner v-if="isLoading" class="col-7" />
-    <div v-else class="col-7 follow-page scrollbar">
+    <div
+      v-else
+      class="follow-page scrollbar"
+      :class="{ 'col-7': fullWidth > 574 }"
+    >
       <div class="follow-outer">
         <div class="follow-lists-title">
           <router-link
@@ -16,6 +23,13 @@
             <p class="tweet-count">{{ tweets.length }}&ensp;推文</p>
           </div>
         </div>
+        <!-- component UserProfileCard.vue -->
+        <UserProfileCard
+          class="user-profile-card"
+          :targetProfile="targetProfile"
+          :initialChangeFollow="followShip"
+          @change-follow-ship="changeFollowShip"
+        />
         <!-- component FollowerNavPills.vue -->
         <FollowerNavPills />
         <!-- UserFollowers.vue, UserFollowings.vue -->
@@ -28,45 +42,131 @@
 
     <!--component Populars -->
     <Populars
-      class="col-3 popular"
+      class="popular"
+      :class="{ 'col-3': fullWidth > 574, 'd-none': fullWidth <= 574 }"
       @after-follow-change-in-popular="afterFollowChange"
     />
+    <MobileNavbar class="mobile-navbar" />
     <CreateTweetModal />
   </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
+import MobileNavbar from "../components/MobileNavbar.vue";
 import FollowerNavPills from "../components/FollowerNavPills.vue";
 import Populars from "../components/Populars.vue";
+import UserProfileCard from "../components/UserProfileCard.vue";
 import Spinner from "./../components/Spinner.vue";
 import { Toast } from "./../utils/helpers";
 import tweetsAPI from "./../apis/tweets";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
+import usersAPI from "./../apis/users";
 
 export default {
   name: "UserFollowList",
   components: {
     Navbar,
     Populars,
+    UserProfileCard,
     FollowerNavPills,
     CreateTweetModal,
     Spinner,
+    MobileNavbar,
   },
   data() {
     return {
+      targetProfile: {
+        id: -1,
+        account: "",
+        email: "",
+        name: "",
+        avatar: "",
+        cover: "",
+        introduction: "",
+        role: "",
+      },
       tweets: [],
       userName: "", // 渲染頁面上方標題
       changeFollow: false,
       isLoading: true,
+      fullWidth: 0,
     };
   },
   created() {
     const { id: userId } = this.$route.params;
-    // this.fetchPopular();
+    this.fetchProfile(userId);
     this.fetchTweets(userId);
   },
+  mounted() {
+    this.fullWidth = window.innerWidth;
+    // window.onresize 及時監聽視窗大小
+    window.onresize = () => {
+      this.fullWidth = window.innerWidth;
+    };
+  },
+  destroyed() {
+    // 元件銷毀要 解綁事件
+    window.onresize = null;
+  },
   methods: {
+    async fetchProfile(userId) {
+      try {
+        this.isLoading = true;
+        const response = await usersAPI.getTheUser({ userId });
+        if (response.statusText !== "OK") {
+          throw new Error("無法取得使用者資料，請稍後再試");
+        }
+        const {
+          id,
+          account,
+          email,
+          name,
+          avatar,
+          cover,
+          introduction,
+          role,
+          followerCount,
+          followingCount,
+          tweetCount,
+        } = {
+          id: response.data.id,
+          account: response.data.account,
+          email: response.data.email,
+          name: response.data.name,
+          avatar: response.data.avatar,
+          cover: response.data.cover,
+          introduction: !response.data.introduction
+            ? ""
+            : response.data.introduction,
+          role: response.data.role,
+          followerCount: response.data.followerCount,
+          followingCount: response.data.followingCount,
+          tweetCount: response.data.tweetCount,
+        };
+        this.targetProfile = {
+          id,
+          account,
+          email,
+          name,
+          avatar,
+          cover,
+          introduction,
+          role,
+          followerCount,
+          followingCount,
+          tweetCount,
+        };
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.error(error.message);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }
+    },
     afterFollowChange() {
       this.changeFollow = !this.changeFollow;
     },
@@ -136,6 +236,31 @@ export default {
   .scrollbar {
     &::-webkit-scrollbar {
       width: 1px;
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .outer-follow-wrapper {
+    .follow-page {
+      .follow-outer {
+        .user-profile-card {
+          display: none;
+        }
+        .follow-lists-title {
+          .arrow {
+          }
+          .name-tweet {
+            .name {
+            }
+            .tweet-count {
+            }
+          }
+        }
+      }
+    }
+    .mobile-navbar {
+      display: none;
     }
   }
 }

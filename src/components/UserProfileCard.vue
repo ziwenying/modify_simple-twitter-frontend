@@ -128,8 +128,8 @@ export default {
               }
             : following;
         });
-        this.$emit('change-follow-ship', true)
-        this.$store.dispatch('fetchPopular')
+        this.$emit("change-follow-ship", true);
+        this.$store.dispatch("fetchPopular");
         Toast.fire({
           icon: "success",
           title: "成功追蹤該使用者",
@@ -163,8 +163,8 @@ export default {
               }
             : following;
         });
-        this.$emit('change-follow-ship', false)
-        this.$store.dispatch('fetchPopular')
+        this.$emit("change-follow-ship", false);
+        this.$store.dispatch("fetchPopular");
         Toast.fire({
           icon: "success",
           title: "已取消追蹤該使用者",
@@ -191,20 +191,20 @@ export default {
   border-left: $light-blue2 1px solid;
   border-right: $light-blue2 1px solid;
   .background-img {
-    height: 200px;
+    width: 100%;
+    height: 124px;
   }
   .user-avatar {
     position: absolute;
-    top: 124px;
+    top: 89px;
     left: 16px;
-    width: 140px;
-    height: 140px;
+    width: 80px;
+    height: 80px;
+    margin: 0 0 0 24px;
     border-radius: 50%;
-    border: 4px $white solid;
     .avatar {
-      width: 132px;
-      height: 132px;
-      object-fit: cover;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
     }
   }
@@ -212,17 +212,17 @@ export default {
   .user-edit {
     @extend %btn-unfollowed-style;
     position: absolute;
-    top: 216px;
-    right: 16px;
+    top: 140px;
+    left: 239px;
     width: 128px;
   }
 
   .btn-icon {
     display: flex;
     position: absolute;
-    top: 216px;
-    right: 16px;
-    widows: 100%;
+    left: 239px;
+    top: 140px;
+    width: 100%;
     .message-btn,
     .bell-btn {
       width: 40px;
@@ -246,7 +246,7 @@ export default {
   }
 
   .user-title {
-    margin: 72px 0 0 16px;
+    margin: 48px 0 0 16px;
     .name {
       font-size: 18px;
       font-weight: 700;
@@ -262,7 +262,7 @@ export default {
   }
   .follow {
     display: flex;
-    margin: 8px 0 0 16px;
+    margin: 16px 0 0 16px;
     font-size: 14px;
 
     .following,
@@ -281,6 +281,65 @@ export default {
     }
     .follower {
       margin: 0 0 0 20px;
+    }
+  }
+
+  .user-title,
+  .user-text,
+  .follow {
+    padding: 0 24px;
+    width: 100vw;
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .user-profile-outer {
+    .background-img {
+      height: 200px;
+    }
+    .user-avatar {
+      position: absolute;
+      top: 124px;
+      left: 16px;
+      margin: 0;
+      width: 140px;
+      height: 140px;
+      border: 4px $white solid;
+      .avatar {
+        width: 132px;
+        height: 132px;
+        object-fit: cover;
+      }
+    }
+
+    .user-edit {
+      all: unset;
+      @include btn-unfollowed-style-mixin();
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 216px;
+      right: 16px;
+      width: 128px;
+    }
+    .btn-icon {
+      top: 216px;
+      right: 16px;
+      width: 100%;
+    }
+    .user-title {
+      margin: 72px 0 0 16px;
+    }
+    .user-text {
+      margin: 6px 17px 0 16px;
+      font-size: 14px;
+    }
+    .user-title,
+    .user-text,
+    .follow {
+      padding: 0;
+      width: 100%;
     }
   }
 }

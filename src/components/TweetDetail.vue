@@ -27,10 +27,10 @@
     </div>
     <div class="tweet-reply-heart">
       <img
-        @click.prevent="isClickedTweet(oneTweet.id)"
-        class="icon"
         data-toggle="modal"
         data-target="#replyTweetModal"
+        @click.prevent="isClickedTweet(oneTweet.id)"
+        class="icon"
         src="~@/assets/image/reply.png"
         alt="reply"
       />
@@ -49,12 +49,27 @@
         alt="heart"
       />
     </div>
+    <div
+      class="reply-box"
+      @click.prevent="isClickedTweet(oneTweet.id)"
+      data-toggle="modal"
+      data-target="#replyTweetModal"
+    >
+      <div class="modal-user-avatar">
+        <img :src="currentUser.avatar" alt="avatar" />
+      </div>
+      <div class="reply-box-content">
+        <div class="text">回覆你的推</div>
+        <button class="modal-reply-btn">回覆</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { exactTimeFilter } from "./../utils/mixins";
 import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 import tweetsAPI from "./../apis/tweets";
 
 export default {
@@ -69,6 +84,9 @@ export default {
       type: Number,
       require: true,
     },
+  },
+  computed: {
+    ...mapState(["currentUser", "topPopular"]),
   },
   data() {
     return {
@@ -181,14 +199,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$Secondary: #6c757d;
-$black: #171725;
-$light-blue2: #e6ecf0;
+@import "./../assets/application.scss";
 
 .main-tweet-wrapper {
   display: flex;
   flex-direction: column;
-  margin: 0 16px 16px 16px;
+  margin: 0 16px 16px 32px;
   .tweet-title {
     display: flex;
     margin: 16px 0 10px 0;
@@ -243,7 +259,49 @@ $light-blue2: #e6ecf0;
       cursor: pointer;
     }
     img:nth-child(1) {
-      margin: 0 133px 0 0;
+      margin: 0 40px 0 0;
+    }
+  }
+  .reply-box {
+    display: flex;
+    align-items: center;
+    padding: 16px 0 0 0;
+    border-top: $light-blue2 1px solid;
+    .modal-user-avatar {
+      img {
+        @extend %user-avatar;
+      }
+    }
+    .reply-box-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      cursor: pointer;
+      .text {
+        margin: 0 0 0 8px;
+        color: $Secondary;
+      }
+      .modal-reply-btn {
+        @extend %btn-style;
+        margin: 0 24px 0 0;
+        width: 64px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .main-tweet-wrapper {
+    margin: 0 16px 16px 16px;
+    .tweet-reply-heart {
+      margin: 16px 0 0 0;
+      img:nth-child(1) {
+        margin: 0 133px 0 0;
+      }
+    }
+    .reply-box {
+      display: none;
     }
   }
 }
