@@ -114,7 +114,7 @@ export default {
               }
             : showFollowList;
         });
-        this.$store.dispatch('fetchPopular')
+        this.$store.dispatch("fetchPopular");
         Toast.fire({
           icon: "success",
           title: "成功追蹤該使用者",
@@ -148,7 +148,7 @@ export default {
               }
             : showFollowList;
         });
-        this.$store.dispatch('fetchPopular')
+        this.$store.dispatch("fetchPopular");
         Toast.fire({
           icon: "success",
           title: "已取消追蹤該使用者",
@@ -177,8 +177,7 @@ export default {
     .follow-link {
       display: flex;
       position: relative;
-      max-height: 158px;
-      padding: 16px 23px 16px 23px;
+      padding: 16px 23px 16px 35px;
       border-bottom: $light-blue2 1px solid;
       border-left: $light-blue2 1px solid;
       .user-avatar {
@@ -223,6 +222,12 @@ export default {
         width: 64px;
       }
     }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .follow-link {
+    padding: 16px 23px 16px 23px;
   }
 }
 </style>

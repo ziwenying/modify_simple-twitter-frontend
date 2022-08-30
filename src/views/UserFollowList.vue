@@ -5,7 +5,7 @@
       class="main-nav"
       :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
     />
-    <Spinner v-if="isLoading" class="col-7" />
+    <Spinner v-if="isLoading" class="spinner col-7" />
     <div
       v-else
       class="follow-page scrollbar"
@@ -58,6 +58,7 @@ import FollowerNavPills from "../components/FollowerNavPills.vue";
 import Populars from "../components/Populars.vue";
 import UserProfileCard from "../components/UserProfileCard.vue";
 import Spinner from "./../components/Spinner.vue";
+import { mapState } from "vuex";
 import { Toast } from "./../utils/helpers";
 import tweetsAPI from "./../apis/tweets";
 import CreateTweetModal from "../components/CreateTweetModal.vue";
@@ -74,6 +75,9 @@ export default {
     Spinner,
     MobileNavbar,
   },
+  computed: {
+    ...mapState(["currentUser", "topPopular"]),
+  },
   data() {
     return {
       targetProfile: {
@@ -89,6 +93,7 @@ export default {
       tweets: [],
       userName: "", // 渲染頁面上方標題
       changeFollow: false,
+      followShip: false,
       isLoading: true,
       fullWidth: 0,
     };
@@ -97,6 +102,7 @@ export default {
     const { id: userId } = this.$route.params;
     this.fetchProfile(userId);
     this.fetchTweets(userId);
+    this.fetchFollowings(this.currentUser.id);
   },
   mounted() {
     this.fullWidth = window.innerWidth;
@@ -192,6 +198,38 @@ export default {
         });
       }
     },
+    changeFollowShip(payload) {
+      this.followShip = payload;
+      // 在"別人"的個人頁面按下追蹤或退追按鈕, 下方的追隨者人數會相應變化
+      if (this.followShip === true) {
+        this.targetProfile = {
+          ...this.targetProfile,
+          followerCount: this.targetProfile.followerCount + 1,
+        };
+      } else if (this.followShip === false) {
+        this.targetProfile = {
+          ...this.targetProfile,
+          followerCount: this.targetProfile.followerCount - 1,
+        };
+      }
+    },
+    async fetchFollowings(userId) {
+      // 這邊為了個人頁面的追蹤按鈕
+      try {
+        const response = await usersAPI.getFollowings({ userId });
+        const { data } = response;
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+        this.followingList = data;
+        const followingShip = this.followingList.find(
+          (following) => following.followingId === Number(this.$route.params.id)
+        );
+        this.followShip = !!followingShip; //可以判斷 true 正在追蹤，傳到 UserProfileCard 使用
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
   },
 };
 </script>
@@ -200,6 +238,9 @@ export default {
 @import "./../assets/application.scss";
 
 .outer-follow-wrapper {
+  .spinner {
+    margin: 10% auto;
+  }
   .follow-page {
     overflow-y: scroll;
     max-height: 914px;

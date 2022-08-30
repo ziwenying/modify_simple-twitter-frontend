@@ -5,7 +5,7 @@
       class="main-nav"
       :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
     />
-    <Spinner v-if="isLoading" class="col-7" />
+    <Spinner v-if="isLoading" class="col-7 spinner" />
     <!-- MainPage.vue & ReplyList -->
     <router-view
       v-else
@@ -141,6 +141,9 @@ export default {
 @import "./../assets/application.scss";
 
 .outer-main-wrapper {
+  .spinner {
+    margin: 10% auto;
+  }
   .main-page {
     overflow-y: scroll;
     max-height: 914px;

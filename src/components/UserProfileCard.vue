@@ -213,14 +213,14 @@ export default {
     @extend %btn-unfollowed-style;
     position: absolute;
     top: 140px;
-    left: 239px;
+    left: calc(10px + 45%);
     width: 128px;
   }
 
   .btn-icon {
     display: flex;
     position: absolute;
-    left: 239px;
+    left: calc(10px + 45%);
     top: 140px;
     width: 100%;
     .message-btn,

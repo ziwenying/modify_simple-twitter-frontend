@@ -5,7 +5,7 @@
       class="main-nav"
       :class="{ 'col-2': fullWidth > 574, 'd-none': fullWidth <= 574 }"
     />
-    <Spinner v-if="isLoading" class="col-7" />
+    <Spinner v-if="isLoading" class="col-7 spinner" />
     <div class="user-page" :class="{ 'col-7': fullWidth > 574 }" v-else>
       <div class="user-outer">
         <div class="reply-lists-title">
@@ -313,6 +313,9 @@ export default {
 @import "./../assets/application.scss";
 
 .outer-user-wrapper {
+  .spinner {
+    margin: 10% auto;
+  }
   .user-page {
     .user-outer {
       .reply-lists-title {
