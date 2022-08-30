@@ -1,16 +1,16 @@
 ![image](./src/assets/image/main-page.jpg)
 
-# 【專案結束後調整】
+## 【專案結束後調整】
 
-### 2022/08/30 新增 RWD：仍在調整中。
+2022/08/30 新增 RWD：仍在調整中。
 
-# 【介紹】
+## 【介紹】
 
 此專案為 Alpha Camp 課程的畢業協作專案，採取前後分離的方式進行小組形式的開發，仿 Twitter 產品的功能與內容。
 
 《後端 repo 網址：https://github.com/ritachien/twitter-api-2022》
 
-# 【使用方式】
+## 【使用方式】
 
 1. 複製本專案
    git clone https://github.com/ziwenying/simple-twitter-frontend.git
@@ -37,25 +37,25 @@
 6. sweetalert2
 7. bootstrap
 
-#【前台測試帳號】
+## 【前台測試帳號】
 
 account: user1/
 email: user1@example.com/
 password: 12345678
 
-# 【後台測試帳號】
+## 【後台測試帳號】
 
 account: root/
 email: root@example.com/
 password: 12345678
 
-# 【專案網頁點此進入】
+## 【專案網頁點此進入】
 
 https://ziwenying.github.io/modify_simple-twitter-frontend/#/login
 
-# 【功能】
+## 【功能】
 
-## 前台
+### 前台
 
 1. 進行註冊
 2. 瀏覽頁面及全部推文
@@ -65,7 +65,7 @@ https://ziwenying.github.io/modify_simple-twitter-frontend/#/login
 6. 設定使用者的資料
 7. 追蹤和取消他人
 
-## 後台
+### 後台
 
 1. 瀏覽所有推文
 2. 瀏覽所有使用者及其數據
