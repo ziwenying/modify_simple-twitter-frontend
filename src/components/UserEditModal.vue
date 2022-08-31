@@ -283,7 +283,6 @@ export default {
 .modal {
   .modal-dialog {
     all: unset;
-    height: 100vh;
     .modal-content {
       border-radius: 0px;
       .modal-header {
@@ -325,6 +324,8 @@ export default {
       }
       .modal-body {
         padding: 0;
+        width: 100vw;
+        height: 100vh;
         .modal-img {
           position: relative;
           width: 100%;

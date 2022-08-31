@@ -220,9 +220,9 @@ export default {
   .btn-icon {
     display: flex;
     position: absolute;
-    left: calc(10px + 35%);
+    left: calc(10px + 45%);
     top: 133px;
-    width: 100%;
+    width: 220px;
     .message-btn,
     .bell-btn {
       width: 40px;
