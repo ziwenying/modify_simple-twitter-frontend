@@ -45,8 +45,7 @@
     />
     <AdminUserCards
       v-else
-      class="p-0"
-      :class="{ 'col-10': fullWidth > 574 }"
+      :class="{ 'col-10': fullWidth > 574, 'p-0': fullWidth > 574 }"
       :initial-users="users"
     />
   </div>

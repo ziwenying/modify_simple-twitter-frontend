@@ -13,7 +13,7 @@
 ## 【使用方式】
 
 1. 複製本專案
-   git clone https://github.com/ziwenying/simple-twitter-frontend.git
+   git clone https://github.com/ziwenying/modify_simple-twitter-frontend.git
 
 2. 移動至專案資料夾
    cd simple-twitter-frontend

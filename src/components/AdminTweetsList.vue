@@ -137,6 +137,7 @@ export default {
           color: $black;
           font-size: 16px;
           font-weight: 400;
+          overflow-wrap: anywhere;
         }
       }
       .delete-btn {

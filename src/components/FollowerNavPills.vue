@@ -40,6 +40,7 @@ export default {
   display: flex;
   position: sticky;
   top: 74px;
+  height: 55px;
   background: $white;
   border-right: $light-blue2 1px solid;
   border-bottom: $light-blue2 1px solid;

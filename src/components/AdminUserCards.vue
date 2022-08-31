@@ -2,56 +2,56 @@
   <div class="users-list">
     <h4 class="title">使用者列表</h4>
     <div class="cards-panel row">
-      <div class="col-3 p-0" v-for="user in initialUsers" :key="user.id">
-        <div class="user-card">
-          <div class="background-img">
-            <img :src="user.cover" alt="background-image" />
+      <!-- <div class="col-3 p-0" v-for="user in initialUsers" :key="user.id"> -->
+      <div class="user-card p-0" v-for="user in initialUsers" :key="user.id">
+        <div class="background-img">
+          <img :src="user.cover" alt="background-image" />
+        </div>
+        <img class="avatar" :src="user.avatar" alt="avatar" />
+        <div class="card-content">
+          <div class="name">
+            <p :title="user.name">{{ user.name }}</p>
           </div>
-          <img class="avatar" :src="user.avatar" alt="avatar" />
-          <div class="card-content">
-            <div class="name">
-              <p :title="user.name">{{ user.name }}</p>
+          <div class="account">
+            <p :title="`@${user.account}`">@{{ user.account }}</p>
+          </div>
+          <div class="tweets-likes">
+            <div class="tweets-count">
+              <img
+                class="pen-icon icon"
+                src="~@/assets/image/pen.png"
+                alt="pen-icon"
+              />
+              <span class="tweets-total">{{
+                user.tweetCount | displayCount
+              }}</span>
             </div>
-            <div class="account">
-              <p :title="`@${user.account}`">@{{ user.account }}</p>
+            <div class="likes-count">
+              <img
+                class="like-icon icon"
+                src="~@/assets/image/heart.png"
+                alt="like-icon"
+              />
+              <span class="likes-total">{{
+                user.likeCount | displayCount
+              }}</span>
             </div>
-            <div class="tweets-likes">
-              <div class="tweets-count">
-                <img
-                  class="pen-icon icon"
-                  src="~@/assets/image/pen.png"
-                  alt="pen-icon"
-                />
-                <span class="tweets-total">{{
-                  user.tweetCount | displayCount
-                }}</span>
-              </div>
-              <div class="likes-count">
-                <img
-                  class="like-icon icon"
-                  src="~@/assets/image/heart.png"
-                  alt="like-icon"
-                />
-                <span class="likes-total">{{
-                  user.likeCount | displayCount
-                }}</span>
-              </div>
+          </div>
+          <div class="followings-followers">
+            <div class="followings">
+              <span class="followings-quantity"
+                >{{ user.followingCount | displayCount }}&nbsp;個</span
+              ><span>跟隨中</span>
             </div>
-            <div class="followings-followers">
-              <div class="followings">
-                <span class="followings-quantity"
-                  >{{ user.followingCount | displayCount }}&nbsp;個</span
-                ><span>跟隨中</span>
-              </div>
-              <div class="followers">
-                <span class="followers-quantity"
-                  >{{ user.followerCount | displayCount }}&nbsp;位</span
-                ><span>跟隨者</span>
-              </div>
+            <div class="followers">
+              <span class="followers-quantity"
+                >{{ user.followerCount | displayCount }}&nbsp;位</span
+              ><span>跟隨者</span>
             </div>
           </div>
         </div>
       </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -92,7 +92,8 @@ export default {
 @import "./../assets/application.scss";
 
 .users-list {
-  max-width: 100vw;
+  width: 100%;
+  // max-width: 100vw;
   padding-left: 15px;
   border-left: 1px solid $light-blue2;
 
@@ -107,6 +108,7 @@ export default {
     margin: 0 0 0 7px;
     .user-card {
       position: relative;
+      width: 150px;
       min-width: 100px;
       height: 360px;
       margin: 8px;
@@ -114,7 +116,7 @@ export default {
       border-radius: 10px;
       .background-img {
         img {
-          width: 100%;
+          // width: 100%;
           height: 100px;
           border-radius: 10px 10px 0 0;
         }
@@ -194,8 +196,9 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          .followings {
-            margin-right: 8px;
+          .followings,
+          .followers {
+            text-align: center;
           }
           span {
             font-size: 14px;
@@ -216,6 +219,7 @@ export default {
   .users-list {
     .cards-panel {
       .user-card {
+        width: 200px;
         height: 314px;
         .background-img {
           img {
