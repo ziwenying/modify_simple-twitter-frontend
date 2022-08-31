@@ -220,7 +220,7 @@ export default {
   .btn-icon {
     display: flex;
     position: absolute;
-    left: calc(10px + 45%);
+    left: calc(10px + 30%);
     top: 133px;
     width: 220px;
     .message-btn,
