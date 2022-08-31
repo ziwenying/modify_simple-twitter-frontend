@@ -170,7 +170,7 @@ export default {
       color: $black;
     }
     .user-avatar img {
-      margin: 16px 8px 0 12px;
+      margin: 16px 8px 0 24px;
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -235,6 +235,19 @@ export default {
             margin: 0 8px 0 1px;
           }
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .tweet-lists {
+    .tweet-list {
+      .user-avatar img {
+        margin: 16px 8px 0 12px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
       }
     }
   }
