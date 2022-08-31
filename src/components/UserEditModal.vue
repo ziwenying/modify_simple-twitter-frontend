@@ -328,11 +328,11 @@ export default {
         height: 100vh;
         .modal-img {
           position: relative;
-          width: 100%;
+          width: 100vw;
           .black {
             .background-img {
               height: 200px;
-              width: 100%;
+              width: 100vw;
             }
           }
           .black::before {
@@ -535,6 +535,7 @@ export default {
           }
         }
         .modal-body {
+          width: 100%;
           .modal-img {
             width: 639px;
             .black {
