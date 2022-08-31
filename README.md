@@ -4,7 +4,7 @@
 - 2022/08/31 RWD 調整完成。
 
 ![image](./src/assets/image/main-page.jpg)
-![image](./src/assets/image/main-mobile-page.jpg)
+![image](./src/assets/image/mobile-main-page.jpg)
 
 ## 【介紹】
 
