@@ -288,16 +288,6 @@ export default {
         .user-profile-card {
           display: none;
         }
-        .follow-lists-title {
-          .arrow {
-          }
-          .name-tweet {
-            .name {
-            }
-            .tweet-count {
-            }
-          }
-        }
       }
     }
     .mobile-navbar {
