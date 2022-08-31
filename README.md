@@ -1,10 +1,10 @@
 ## 【專案結束後調整】
 
-2022/08/30 新增 RWD：仍在調整中。
-2022/08/31 RWD 調整完成。
+- 2022/08/30 新增 RWD：仍在調整中。
+- 2022/08/31 RWD 調整完成。
 
 ![image](./src/assets/image/main-page.jpg)
-![image](./src/assets/image/mobile-page.jpg)
+![image](./src/assets/image/main-mobile-page.jpg)
 
 ## 【介紹】
 
