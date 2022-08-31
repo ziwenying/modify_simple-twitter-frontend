@@ -153,10 +153,10 @@ export default {
       width: 1px;
     }
   }
-  .mobile-navbar {
-    position: absolute;
-    bottom: 0;
-  }
+  // .mobile-navbar {
+  //   position: absolute;
+  //   bottom: 0;
+  // }
 }
 
 @media screen and (min-width: 575px) {
