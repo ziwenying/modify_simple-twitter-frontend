@@ -7,7 +7,6 @@
       <div class="title">
         <h3>後台登入</h3>
       </div>
-
       <div class="form-field account-field">
         <label for="account">帳號</label>
         <input
@@ -19,10 +18,11 @@
           required
         />
         <div class="alert-msg">
-          <span class="msg" v-if="errorMsg === 'Account not exists for admin'">帳號不存在</span>
+          <span class="msg" v-if="errorMsg === 'Account not exists for admin'"
+            >帳號不存在</span
+          >
         </div>
       </div>
-
       <div class="form-field password-field">
         <label for="password">密碼</label>
         <input
@@ -34,10 +34,11 @@
           required
         />
         <div class="alert-msg">
-          <span class="msg" v-if="errorMsg === 'Password incorrect.' ">密碼錯誤</span>
+          <span class="msg" v-if="errorMsg === 'Password incorrect.'"
+            >密碼錯誤</span
+          >
         </div>
       </div>
-
       <div class="btn-container">
         <button class="login-btn" type="submit" :disabled="isProcessing">
           {{ isProcessing ? "驗證中" : "登入" }}
@@ -67,10 +68,9 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      this.isProcessing = true;
+      this.errorMsg = "";
       try {
-        // 先把錯誤訊息清空
-        this.errorMsg = "";
-        // 表單驗證
         if (!this.account || !this.password) {
           Toast.fire({
             icon: "warning",
@@ -78,44 +78,23 @@ export default {
           });
           return;
         }
-        this.isProcessing = true;
-        // 向後端驗證使用者登入資訊是否合法
-        const { data } = await authorizationAPI.adminSignIn({
+        const response = await authorizationAPI.adminSignIn({
           account: this.account,
           password: this.password,
         });
-        if (data.status === "error") {
-          throw new Error(data.message);
+
+        if (response.status !== 200 && response.statusText !== "OK") {
+          throw new Error(response.data.message);
         }
-        // 如果登入成功, 存下token, 並直接轉址首頁
-        localStorage.setItem("token", data.token);
-        // 把API回傳的登入使用者資料存到Vuex
-        this.$store.commit("setCurrentUser", data.user);
-        // 登入成功, 直接轉址後台頁面
+        localStorage.setItem("token", response.data.token);
+        this.$store.commit("setCurrentUser", response.data.user);
         this.$router.push("/admin/tweets");
       } catch (error) {
-        this.password = "";
         this.isProcessing = false;
-        console.error(error.message)
-        if (error.message === "Account not exists for admin") {
-          this.errorMsg = error.message;
-          Toast.fire({
-            icon: "error",
-            title: "帳號不存在",
-          });
-        } else if (error.message === "Password incorrect.") {
-          this.errorMsg = error.message;
-          Toast.fire({
-            icon: "error",
-            title: "密碼錯誤",
-          });
-        } else {
-          this.errorMsg = error.message;
-          Toast.fire({
-            icon: "error",
-            title: "無法成功登入，請稍後再試",
-          });
-        }
+        Toast.fire({
+          icon: "warning",
+          title: "無法登入，請稍後再試",
+        });
       }
     },
   },

@@ -8,29 +8,27 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currentUser: {
-      id: - 1,
-      name: '',
+      id: -1,
       account: '',
       email: '',
       avatar: '',
       role: ''
     },
     isAuthenticated: false,
-    topPopular: []
+    topPopular: [],
   },
   getters: {
   },
   mutations: {
     setCurrentUser(state, currentUser) {
       state.currentUser = {
+        //原本的預設資料
         ...state.currentUser,
-        ...currentUser  // 等API拉資料進來後覆蓋掉state的currentUser
+        // 用 api 取得的資料覆蓋
+        ...currentUser
       }
-      // 改變登入狀態
       state.isAuthenticated = true
-      state.token = localStorage.getItem('token')
     },
-    // 登出
     revokeAuthentication(state) {
       state.currentUser = {}
       state.isAuthenticated = false
@@ -41,24 +39,29 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async fetchCurrentUser({commit}) {
+    async fetchCurrentUser({ commit }) {
       try {
-        const { data } = await usersAPI.getCurrentUser()
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        const response = await usersAPI.getCurrentUser()
+        if (response.status !== 200 && response.statusText !== 'OK') {
+          throw new Error(response.data.message)
         }
-        const { id, name, account, email, avatar, role } = data
+        const { id, name, account, avatar, role } = { id: response.data.id, name: response.data.name, account: response.data.account, avatar: response.data.avatar, role: response.data.role }
+        // use commit >> call setCurrentUser in mutations
         commit('setCurrentUser', {
-          id, name, account, email, avatar, role
+          id, name, account, avatar, role
         })
-        return {isAuthenticated : true, role: this.state.currentUser.role} //登入有效
+        // login success
+        return { isAuthenticated: true, role: this.state.currentUser.role }
       } catch (error) {
-        console.error(error.message)
-        commit('revokeAuthentication') // 登入無效直接把使用者登出
-        return { isAuthenticated: false, role: '' }  //登入無效
+        // login fail
+        Toast.fire({
+          icon: "error",
+          title: "無法取得當前使用者資料，請稍後再試",
+        });
+        return { isAuthenticated: false, role: '' }
       }
     },
-    async fetchPopular({commit}) {
+    async fetchPopular({ commit }) {
       try {
         const response = await usersAPI.getTopUser();
         const { data } = response;
@@ -67,13 +70,12 @@ export default new Vuex.Store({
         }
         commit('setTopPopular', data)
       } catch (error) {
-        console.error(error.message);
         Toast.fire({
           icon: "error",
-          title: "無法取得推薦追蹤名單",
+          title: "無法取得當前推薦追蹤名單，請稍後再試",
         });
       }
-    },
+    }
   },
   modules: {
   }

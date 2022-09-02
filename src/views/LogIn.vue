@@ -19,10 +19,11 @@
           required
         />
         <div class="alert-msg">
-          <span class="msg" v-if="errorMsg === 'Account not exists for users'">帳號不存在</span>
+          <span class="msg" v-if="errorMsg === 'Account not exists for users'"
+            >帳號不存在</span
+          >
         </div>
       </div>
-
       <div class="form-field password-field">
         <label for="password">密碼</label>
         <input
@@ -34,10 +35,11 @@
           required
         />
         <div class="alert-msg">
-          <span class="msg" v-if="errorMsg === 'Password incorrect.'">密碼錯誤</span>
+          <span class="msg" v-if="errorMsg === 'Password incorrect.'"
+            >密碼錯誤</span
+          >
         </div>
       </div>
-
       <div class="btn-container">
         <button class="login-btn" type="submit" :disabled="isProcessing">
           {{ isProcessing ? "驗證中" : "登入" }}
@@ -65,15 +67,14 @@ export default {
       account: "",
       password: "",
       isProcessing: false,
-      errorMsg: ''
+      errorMsg: "",
     };
   },
   methods: {
     async handleSubmit() {
       try {
-        // 先把錯誤訊息清空
-        this.errorMsg = ''
-        //表單驗證
+        this.isProcessing = true;
+        this.errorMsg = "";
         if (!this.account || !this.password) {
           Toast.fire({
             icon: "warning",
@@ -81,38 +82,35 @@ export default {
           });
           return;
         }
-        this.isProcessing = true;
-        const { data } = await authorizationAPI.signIn({
+        const response = await authorizationAPI.signIn({
           account: this.account,
           password: this.password,
         });
-        if (data.status === "error") {
-          throw new Error(data.message);
+        if (response.status !== 200 || response.statusText !== "OK") {
+          throw new Error(response.data.message);
         }
-        // 把token存在localStorage裡
-        localStorage.setItem("token", data.token);
-        // 把API回傳的登入使用者資料存到Vuex
-        this.$store.commit("setCurrentUser", data.user);
-        // 登入成功, 直接轉址首頁
+        //token in localStorage
+        localStorage.setItem("token", response.data.token);
+        //data deliver vuex
+        this.$store.commit("setCurrentUser", response.data.user);
+        // success to
         this.$router.push("/main/mainpage");
       } catch (error) {
-        this.password = "";
         this.isProcessing = false;
-        console.error(error.message)
-        if (error.message === 'Account not exists for users') {
-          this.errorMsg = error.message
-            Toast.fire({
+        this.password = "";
+        if (error.message === "Account not exists for users") {
+          this.errorMsg = error.message;
+          Toast.fire({
             icon: "error",
             title: "帳號不存在",
           });
-        } else if (error.message === 'Password incorrect.') {
-          this.errorMsg = error.message
+        } else if (error.message === "Password incorrect.") {
+          this.errorMsg = error.message;
           Toast.fire({
             icon: "error",
-            title: "密碼錯誤",
+            title: "帳號不存在",
           });
         } else {
-          this.errorMsg = error.message
           Toast.fire({
             icon: "error",
             title: "無法成功登入，請稍後再試",
