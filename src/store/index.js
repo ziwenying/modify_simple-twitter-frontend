@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import usersAPI from './../apis/users'
 import { Toast } from './../utils/helpers'
+import cookies from "vue-cookies";
 
 Vue.use(Vuex)
 
@@ -32,7 +33,7 @@ export default new Vuex.Store({
     revokeAuthentication(state) {
       state.currentUser = {}
       state.isAuthenticated = false
-      localStorage.removeItem('token')
+      cookies.remove("token");
     },
     setTopPopular(state, topPopular) {
       state.topPopular = [...topPopular]
