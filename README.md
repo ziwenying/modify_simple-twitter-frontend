@@ -2,6 +2,7 @@
 
 - 2022/08/30 新增 RWD：仍在調整中。
 - 2022/08/31 RWD 調整完成。
+- 2022/09/02 重構登入功能 & 以 cookie 存放 token
 
 ![image](./src/assets/image/main-page.jpg)
 ![image](./src/assets/image/mobile-main-page.jpg)
