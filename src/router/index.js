@@ -6,6 +6,7 @@ import User from '../views/User.vue'
 import NotFound from '../views/NotFound.vue'
 import store from './../store'
 import { Toast } from './../utils/helpers'
+import cookies from "vue-cookies";
 
 
 Vue.use(VueRouter)
@@ -130,8 +131,8 @@ const router = new VueRouter({
 
 // get currentUser
 router.beforeEach(async (to, from, next) => {
-  // get token from localStorage
-  const token = localStorage.getItem('token')
+  // get token from cookie
+  const token = cookies.get('token');
   // these pages don't need authenticated
   const pathWithoutAuthenticated = ['login', 'admin-login', 'sign-up']
 
@@ -188,8 +189,8 @@ router.beforeEach(async (to, from, next) => {
 router.beforeEach(async (to, from, next) => {
   // pages need topPopular
   const needTopPopular = ['main-page', 'reply-list', 'user-followers', 'user-followings', 'main-tweets', 'replies', 'liked-tweets']
-  // get token from localStorage
-  const token = localStorage.getItem('token')
+  // get token from cookie
+  const token = cookies.get('token');
   if (token) {
     let { role } = await store.dispatch('fetchCurrentUser')
     if (role === 'user' && needTopPopular.includes(to.name)) {

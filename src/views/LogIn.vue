@@ -89,8 +89,8 @@ export default {
         if (response.status !== 200 || response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
-        //token in localStorage
-        localStorage.setItem("token", response.data.token);
+        // token in cookie
+        this.$cookies.set("token", response.data.token, "1d");
         //data deliver vuex
         this.$store.commit("setCurrentUser", response.data.user);
         // success to
