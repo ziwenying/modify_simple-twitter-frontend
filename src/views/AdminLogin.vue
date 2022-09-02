@@ -91,10 +91,26 @@ export default {
         this.$router.push("/admin/tweets");
       } catch (error) {
         this.isProcessing = false;
-        Toast.fire({
-          icon: "warning",
-          title: "無法登入，請稍後再試",
-        });
+        this.password = "";
+        if (error.message === "Account not exists for admin") {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "帳號不存在",
+          });
+        } else if (error.message === "Password incorrect.") {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "密碼錯誤",
+          });
+        } else {
+          this.errorMsg = error.message;
+          Toast.fire({
+            icon: "error",
+            title: "無法成功登入，請稍後再試",
+          });
+        }
       }
     },
   },
