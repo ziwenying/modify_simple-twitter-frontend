@@ -73,7 +73,7 @@ export default {
   name: "MainTweets",
   mixins: [fromNowFilter],
   props: {
-    initialTweets: {
+    initialShowTweets: {
       type: Array,
       required: true,
     },
@@ -85,8 +85,8 @@ export default {
     };
   },
   watch: {
-    initialTweets(newValue) {
-      // 監聽：為了發推文後，即時更新
+    initialShowTweets(newValue) {
+      // 監聽：Infinite Scroll
       this.tweets = [...newValue];
     },
   },
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     fetchTweets() {
-      this.tweets = this.initialTweets;
+      this.tweets = this.initialShowTweets;
     },
     isClickedTweet(tweetId) {
       //被點擊那則推文的資料 -> 顯示 modal 使用
