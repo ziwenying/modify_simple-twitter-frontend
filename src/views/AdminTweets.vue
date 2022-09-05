@@ -106,7 +106,7 @@ export default {
     });
   },
   destroyed() {
-    // 元件銷毀要 解綁事件
+    // 元件銷毀要解綁事件
     window.onresize = null;
   },
   methods: {
