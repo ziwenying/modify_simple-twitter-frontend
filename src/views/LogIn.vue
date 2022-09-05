@@ -59,7 +59,6 @@
 <script>
 import { Toast } from "./../utils/helpers";
 import authorizationAPI from "./../apis/authorization";
-
 export default {
   name: "LogIn",
   data() {
@@ -124,7 +123,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../assets/application.scss";
-
 .container {
   form {
     display: flex;

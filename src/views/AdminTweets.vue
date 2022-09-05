@@ -1,5 +1,9 @@
 <template>
-  <div class="admin-tweets-wrapper row">
+  <div
+    id="infinite-list"
+    ref="infinite_list"
+    class="admin-tweets-wrapper row scrollbar"
+  >
     <div class="admin-nav-wrapper">
       <!-- 推文清單 -->
       <router-link to="/admin/tweets" class="nav">
@@ -45,8 +49,9 @@
     />
     <AdminTweetsList
       v-else
+      class="admin-tweets-list"
       :class="{ 'col-10': fullWidth > 574 }"
-      :initial-tweets="tweets"
+      :initial-tweets="showTenTweets"
       @after-delete-tweet="afterTweetDelete"
     />
   </div>
@@ -74,6 +79,9 @@ export default {
     return {
       role: "",
       tweets: [],
+      showTenTweets: [],
+      pushIndex: 0,
+      loading: false,
       isLoading: true,
       fullWidth: 0,
     };
@@ -87,12 +95,34 @@ export default {
     window.onresize = () => {
       this.fullWidth = window.innerWidth;
     };
+
+    // 瀑布
+    const listScroll = this.$refs.infinite_list;
+    listScroll.addEventListener("scroll", () => {
+      const list = document.querySelector("#infinite-list");
+      if (list.scrollTop + list.clientHeight + 1 >= list.scrollHeight) {
+        this.loadMore();
+      }
+    });
   },
   destroyed() {
-    // 元件銷毀要 解綁事件
+    // 元件銷毀要解綁事件
     window.onresize = null;
   },
   methods: {
+    loadMore() {
+      if (this.showTenTweets.length >= this.tweets.length) {
+        return;
+      }
+      this.loading = true;
+      setTimeout(() => {
+        for (let i = this.pushIndex; i < this.pushIndex + 10; i++) {
+          this.showTenTweets.push(this.tweets[i]);
+        }
+        this.pushIndex += 10;
+        this.loading = false;
+      }, 500);
+    },
     async fetchTweets() {
       try {
         this.isLoading = true;
@@ -102,6 +132,11 @@ export default {
         }
         this.tweets = data;
         this.isLoading = false;
+        // 只撈 10 筆
+        for (let i = this.pushIndex; i < 10; i++) {
+          this.showTenTweets.push(this.tweets[i]);
+        }
+        this.pushIndex += 10;
       } catch (error) {
         this.isLoading = false;
         console.error(error.message);
@@ -134,34 +169,48 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../assets/application.scss";
-.admin-nav-wrapper {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 52px;
-  background: $white;
-  z-index: 1;
-  img {
-    width: 24px;
-    height: 24px;
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 1px;
   }
-  .logout-btn {
-    &:hover {
-      color: #0062ff;
-      text-decoration: underline;
+}
+.admin-tweets-wrapper {
+  overflow-y: scroll;
+  max-height: 914px;
+  .admin-nav-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 52px;
+    background: $white;
+    z-index: 1;
+    img {
+      width: 24px;
+      height: 24px;
+    }
+    .logout-btn {
+      &:hover {
+        color: #0062ff;
+        text-decoration: underline;
+      }
     }
   }
+  .spinner {
+    width: 100%;
+  }
+  // .admin-tweets-list {
+  //   overflow-y: scroll;
+  //   max-height: 914px;
+  // }
 }
-.spinner {
-  width: 100%;
-}
-
 @media screen and (min-width: 575px) {
-  .admin-nav-wrapper {
-    display: none;
+  .admin-tweets-wrapper {
+    .admin-nav-wrapper {
+      display: none;
+    }
   }
 }
 </style>

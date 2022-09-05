@@ -1,7 +1,6 @@
 <template>
-  <div class="main-outer">
+  <div id="infinite-list" ref="infinite_list" class="main-outer">
     <div class="main-page-title">
-      <img class="user-avatar" :src="currentUser.avatar" alt="user-avatar" />
       <h4 class="pb-4">首頁</h4>
     </div>
     <form @submit.stop.prevent="handleSubmit">
@@ -39,7 +38,10 @@
       </div>
     </form>
     <!-- component MainTweet -->
-    <MainTweet @after-click-reply="afterClickReply" :initialTweets="tweets" />
+    <MainTweet
+      @after-click-reply="afterClickReply"
+      :initialShowTweets="showTenTweets"
+    />
   </div>
 </template>
 
@@ -72,6 +74,9 @@ export default {
   data() {
     return {
       tweets: [],
+      showTenTweets: [],
+      pushIndex: 0,
+      loading: false,
       description: "",
     };
   },
@@ -85,8 +90,34 @@ export default {
   },
   created() {
     this.tweets = this.initialTweets;
+    for (let i = this.pushIndex; i < 10; i++) {
+      this.showTenTweets.push(this.tweets[i]);
+    }
+    this.pushIndex += 10;
+  },
+  mounted() {
+    const listScroll = this.$refs.infinite_list;
+    listScroll.addEventListener("scroll", () => {
+      const list = this.$refs.infinite_list;
+      if (list.scrollTop + list.clientHeight + 1 >= list.scrollHeight) {
+        this.loadMore();
+      }
+    });
   },
   methods: {
+    loadMore() {
+      if (this.showTenTweets.length >= this.tweets.length) {
+        return;
+      }
+      this.loading = true;
+      setTimeout(() => {
+        for (let i = this.pushIndex; i < this.pushIndex + 10; i++) {
+          this.showTenTweets.push(this.tweets[i]);
+        }
+        this.pushIndex += 10;
+        this.loading = false;
+      }, 500);
+    },
     async handleSubmit() {
       try {
         // 先判斷有無超過字數
@@ -193,9 +224,6 @@ export default {
 
 @media screen and (min-width: 575px) {
   .main-outer {
-    .user-avatar {
-      display: none;
-    }
     h4 {
       width: 100%;
       border-left: $light-blue2 1px solid;
